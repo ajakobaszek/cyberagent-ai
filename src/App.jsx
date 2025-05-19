@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { useState } from "react";
 import "./index.css";
 
@@ -7,20 +6,28 @@ export default function App() {
   const [response, setResponse] = useState("");
 
   const askAI = async () => {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_OPENAI_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: message }],
-      }),
-    });
+    try {
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: "user", content: message }],
+        }),
+      });
 
-    const data = await res.json();
-    setResponse(data.choices[0].message.content);
+      if (!res.ok) {
+        throw new Error(`API error: ${res.statusText}`);
+      }
+
+      const data = await res.json();
+      setResponse(data.choices[0].message.content);
+    } catch (error) {
+      setResponse("Wystąpił błąd: " + error.message);
+    }
   };
 
   return (
@@ -47,17 +54,3 @@ export default function App() {
     </div>
   );
 }
-=======
-import React from 'react'
-
-function App() {
-  return (
-    <div style={{ textAlign: 'center', padding: '2rem' }}>
-      <h1>🚀 CyberAgent AI</h1>
-      <p>Witamy w Twoim centrum cyberbezpieczeństwa wspieranym przez AI.</p>
-    </div>
-  )
-}
-
-export default App
->>>>>>> 843caa2 (Deploy gotowego projektu AI)
